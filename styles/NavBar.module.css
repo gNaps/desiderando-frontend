@@ -1,0 +1,23 @@
+.nav {
+    background-color: #292939;
+    display: flex;
+    justify-content: space-between;
+    padding: 25px 20px;
+    border-radius: 0px 0px 20px 20px;
+}
+
+.sub_nav li{
+    background-color: #292939;
+    display: flex;
+    padding: 0px 30px;
+    box-shadow: 0 4px 14px 0 #292939;
+    border-radius: 20px;
+    margin-top: 10px;
+    color: #F5F5F2;
+    align-items: center;
+    cursor: pointer;
+}
+
+.sub_nav i{
+    margin-right: 10px;
+}

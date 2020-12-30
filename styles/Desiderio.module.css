@@ -1,0 +1,15 @@
+.card_desiderio {
+    background: #F5F5F2;
+    box-shadow: 0 7px 10px 0 #D9D9D3;
+    padding: 18px;
+    border-radius: 20px;
+}
+
+.bought_by {
+    margin-top: 10px;
+    background: #ED6767;
+    box-shadow: 0 4px 14px 0 #ED6767;
+    padding: 32px 46px;
+    border-radius: 20px;
+    color: #FFF;
+}

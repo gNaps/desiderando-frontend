@@ -1,0 +1,38 @@
+.card {
+    background: #793F5C;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 32px;
+    box-shadow: 0 4px 14px 0 #A6718C;
+    border-radius: 25px;
+    background-image: url('/bg-my-list.svg');
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.card h4 {
+    font-size: 24px;
+    color: #F5F5F2;
+    margin: 0;
+    margin-bottom: 10px;
+
+}
+
+.card p {
+    font-size: 16px;
+    color: #F5F5F2;
+    letter-spacing: -0.06px;
+    margin: 0;
+}
+
+.card_p {
+    display: flex;
+    align-items: center;
+    padding: 10px 0px;
+}
+
+.card_p img {
+    margin-right: 10px;
+}

@@ -1,0 +1,60 @@
+.logo {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 25px;
+    font-size: 20px;
+}
+
+.logo_img {
+    width: 60%;
+}
+
+.btn_container {
+    position: absolute;
+    bottom: 30px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.btn_container a {
+    width: 100%;
+}
+
+.btn_login {
+    background: #793F5C;
+    box-shadow: 0 4px 14px 0 #793F5C;
+    width: 100%;
+    border-radius: 25px;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.btn_login p{
+    margin: 0;
+}
+
+.btn_signin {
+    background: #292939;
+    box-shadow: 0 4px 14px 0 #292939;
+    width: 100%;
+    border-radius: 25px;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.btn_signin p {
+    margin: 0;
+}

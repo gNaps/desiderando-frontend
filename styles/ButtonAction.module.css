@@ -1,0 +1,16 @@
+.button_action {
+    background: #ED6767;
+    box-shadow: 0 4px 14px 0 #ED6767;
+    width: 90%;
+    border-radius: 25px;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+    padding: 10px;
+    cursor: pointer;
+} 
+
+.button_action p {
+    margin: 0;
+}
