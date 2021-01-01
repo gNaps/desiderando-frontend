@@ -1,5 +1,5 @@
 import cookie from 'js-cookie';
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { API_URL } from '../utils/url';
 import Router from 'next/router';
 
@@ -7,12 +7,19 @@ import Container from '../components/Container'
 import styles from '../styles/Login.module.css'
 import dashstyles from '../styles/Dashboard.module.css'
 
+import AuthContext from '../context/AuthContext'
+
 export default function login () {
     
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState(false)
+    const { loginUser } = useContext(AuthContext)
 
+    /**
+     * on submit user login in
+     * @param {event} e 
+     */
     const handleSubmit = async (e) => {
         e.preventDefault()
         console.log("chiamo strapi per login")
@@ -34,6 +41,7 @@ export default function login () {
             } else {
                 if(data.jwt) {
                     cookie.set('jwt', data.jwt)
+                    loginUser(data.user)
                     Router.push('/')
                 } else {
                     console.log('utente o password invalidi')
