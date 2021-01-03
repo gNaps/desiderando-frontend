@@ -30,6 +30,7 @@ export const AuthProvider = (props) => {
      * @param {string} jwt 
      */
     const checkUserLoggedIn = async (jwt) => {
+
         try {
             await fetch(`${API_URL}/users/me`, {
                 method: 'GET',
@@ -40,6 +41,7 @@ export const AuthProvider = (props) => {
             })
             .then(response => response.json())
             .then(data => {
+                console.log('user risulta ', data)
                 loginUser(data);
             })
             .catch((error) => {
@@ -64,6 +66,7 @@ export const AuthProvider = (props) => {
         } else {
             console.log('jwt esiste e user = ', user)
             if(user == null){
+                console.log('quindi vado a sceglierlo')
                 checkUserLoggedIn(jwt)
             }
         }

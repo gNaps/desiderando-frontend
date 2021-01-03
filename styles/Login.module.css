@@ -4,6 +4,11 @@
     font-weight: 500;
 }
 
+.login_form .p_description {
+    font-size: 12px;
+    font-weight: 400;
+}
+
 .login_form input {
     background: #E9E8E8;
     border-radius: 10px;
@@ -14,6 +19,10 @@
     font-size: 14px;
 }
 
+.login_form input[type="checkbox"] {
+    width: 20px;
+}
+
 .error {
     margin-top: 28px;
     background: #ED6767;
@@ -21,4 +30,19 @@
     padding: 1px 12px;
     border-radius: 20px;
     color: #FFF;
+}
+
+.login_form h5 {
+    margin: 10px 0px;
+}
+
+.checkbox_row {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox_row div {
+    display: flex;
+    align-items: center;
+    margin-right: 40px;
 }

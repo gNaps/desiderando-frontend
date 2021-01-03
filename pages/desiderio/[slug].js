@@ -2,11 +2,13 @@ import Container from '../../components/Container'
 import NavBar from '../../components/NavBar'
 import ButtonAction from '../../components/ButtonAction'
 import styles from '../../styles/Desiderio.module.css'
+import AlertSuccess from '../../components/AlertSuccess'
+import AlertError from '../../components/AlertError'
 
 import AuthContext from '../../context/AuthContext'
 
 import { useRouter } from 'next/router';
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import { useEffect, useState, useContext } from 'react';
 import cookie from 'js-cookie';
 
@@ -29,8 +31,43 @@ export default function Desiderio() {
       
     const { data: desiderio, error } = useSWR(`${API_URL}/desiderioitems/?slug=${slug}`, fetcher)    
 
-    const handleClick = () => {
+    const [showSuccessAlert, setSuccessAlert] = useState(false)
+    const [showErrorAlert, setErrorAlert] = useState(false)
+    const [message, setMessage] = useState('')
+
+    const handleClick = async () => {
         console.log('you have booked desiderio')
+
+        await fetch(`${API_URL}/desiderioitems/book/${desiderio.id}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${cookie.get('jwt')}`, 
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.statusCode !== 400) {
+                setSuccessAlert(true)
+                mutate(`${API_URL}/desiderioitems/?slug=${slug}`)   
+
+                setTimeout(() => {
+                    setSuccessAlert(false)
+                }, 1500)
+            } else {
+                console.log(data)
+                setErrorAlert(true)
+                setMessage(data.message)
+
+                setTimeout(() => {
+                    setErrorAlert(false)
+                    setMessage('')
+                }, 1500)
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     }
 
     const { user } = useContext(AuthContext)
@@ -40,10 +77,11 @@ export default function Desiderio() {
         <NavBar />
 
         {desiderio && desiderio.desideriolist.what_bought && desiderio.bought_by !== null &&
+            user && desiderio.user == user.id &&
             <div className={styles.bought_by}>
                 {desiderio.desideriolist.who_bought &&
                     <p>
-                        This desiderio is booked by {desiderio.bought_by}
+                        This desiderio is booked by {desiderio.bought_by.email}
                     </p>
                 } 
                 {!desiderio.desideriolist.who_bought &&
@@ -51,6 +89,15 @@ export default function Desiderio() {
                         This desiderio is booked by someone
                     </p>
                 } 
+            </div>
+        }
+
+        {desiderio && desiderio.bought_by !== null &&
+            user && desiderio.user !== user.id &&
+            <div className={styles.bought_by}>
+                <p>
+                    This desiderio is booked by {desiderio.bought_by.email}
+                </p>
             </div>
         }
 
@@ -80,6 +127,16 @@ export default function Desiderio() {
             <div className='footer_action'>
                 <ButtonAction label={'Book desiderio'} action={handleClick} />
             </div>
+        }
+
+        {
+            showSuccessAlert && 
+            <AlertSuccess message={'Your booked was registry succesfully.'} />
+        }
+
+        {
+            showErrorAlert && 
+            <AlertError message={message} />
         }
         </Container>
     )

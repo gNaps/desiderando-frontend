@@ -10,6 +10,7 @@
     background-position: bottom right;
     background-size: contain;
     cursor: pointer;
+    margin-bottom: 20px;
 }
 
 .card h4 {

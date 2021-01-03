@@ -1,0 +1,17 @@
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title button{
+    background: #292939;
+    box-shadow: 0 4px 14px 0 #292939;
+    border-radius: 25px;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+    padding: 10px;
+    cursor: pointer;
+}
