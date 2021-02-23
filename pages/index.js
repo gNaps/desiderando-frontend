@@ -94,7 +94,7 @@ export default function Home() {
   const [invitedList, setInvitedList] = useState([])
 
   React.useEffect(() => {
-    if(listadesideri) {
+    if(listadesideri && listadesideri.length > 0) {
       setMyList(listadesideri.filter((element) => { return !element.invited}))
       setInvitedList(listadesideri.filter((element) => { return element.invited}))
     }

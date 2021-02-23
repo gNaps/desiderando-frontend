@@ -9,7 +9,7 @@ import Invitation from '../../components/Invitation'
 import AuthContext from '../../context/AuthContext'
 
 import { useRouter } from 'next/router';
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import { useEffect, useState, useContext } from 'react';
 import cookie from 'js-cookie';
 
@@ -44,37 +44,40 @@ export default function List() {
     const handleSaveInsert = async () => {
         console.log('inserisco: ', newDesiderio)
 
-        await fetch(`${API_URL}/desiderioitems/${list.id}`, {
+        const request = {
             method: 'POST',
             body: JSON.stringify(newDesiderio),
             headers: {
                 'Authorization': `Bearer ${cookie.get('jwt')}`, 
                 'Content-Type': 'application/json'
             }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if(data.statusCode !== 400) {
-                setSuccessAlert(true)
-                setShowInsert(false)
+        };
 
-                setTimeout(() => {
-                    setSuccessAlert(false)
-                }, 1500)
-            } else {
-                console.log(data)
-                setErrorAlert(true)
-                setMessage(data.message)
+        const response_res = await fetch(`${API_URL}/desiderioitems/${list.id}`, request)
+        const response = await response_res.json()
+        
+        if(response.statusCode) {
+            setErrorAlert(true)
+            setMessage(response.message)
 
-                setTimeout(() => {
-                    setErrorAlert(false)
-                    setMessage('')
-                }, 1500);
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+            setTimeout(() => {
+                setErrorAlert(false)
+                setMessage('')
+            }, 1500);
+        } else {
+            setSuccessAlert(true)
+            setShowInsert(false)
+            setSuccessMessage("Your desiderio was registry succesfully.")
+
+            setTimeout(() => {
+                setSuccessAlert(false)
+                setSuccessMessage("");
+            }, 1500)
+            
+            const newDesiderioitems = [ ... list.desiderioitems ]
+            newDesiderioitems.push(response)
+            mutate(`${API_URL}/desideriolists/?slug=${slug}`, { ...list, desiderioitems: newDesiderioitems })
+        }
     }
 
     const handleChange = e => {
@@ -106,9 +109,11 @@ export default function List() {
             if(!data.message) {
                 setSuccessAlert(true)
                 setShowInvitation(false)
+                setSuccessMessage("User invited succesfully!")
 
                 setTimeout(() => {
                     setSuccessAlert(false)
+                    setSuccessMessage("");
                 }, 1500)
             } else {
                 console.log(data)
@@ -127,6 +132,52 @@ export default function List() {
         });
     }
 
+    const handleSaveTitle = async () => {
+        if(title === list.name) {
+            return;
+        }
+
+        const request = {
+            method: 'PUT',
+            body: JSON.stringify({listName: title}),
+            headers: {
+                'Authorization': `Bearer ${cookie.get('jwt')}`, 
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const response_res = await fetch(`${API_URL}/desideriolists/${list.id}`, request);
+        const response = await response_res.json();
+
+        console.log(response)
+        
+        if(response.statusCode) {
+            setErrorAlert(true)
+            setMessage(response.message)
+
+            setTimeout(() => {
+                setErrorAlert(false)
+                setMessage('')
+            }, 1500);
+        } else {
+            setSuccessAlert(true)
+            setShowInvitation(false)
+            setSuccessMessage("Name updated succcesfully!")
+
+            setTimeout(() => {
+                setSuccessAlert(false)
+                setSuccessMessage("");
+            }, 1500)
+
+            mutate(`${API_URL}/desideriolists/?slug=${slug}`, { ...list, name: response.name })
+        }
+    }
+
+    const handleDeleteInvitation = () => {
+        console.log("handledelete")
+        setShowInvitation(false);
+    }
+
     const { user } = useContext(AuthContext)
 
     const [showInsert, setShowInsert] = useState(false)
@@ -135,8 +186,19 @@ export default function List() {
     const [showSuccessAlert, setSuccessAlert] = useState(false)
     const [showErrorAlert, setErrorAlert] = useState(false)
     const [message, setMessage] = useState('')
+    const [successMessage, setSuccessMessage] = useState('')
 
     const [showInvitation, setShowInvitation] = useState(false)
+
+    const [editTitle, setEditTitle] = useState(false)
+
+    let defaultTitle = "";
+    if(list) {
+        defaultTitle = list.name;
+    }
+
+    const [title, setTitle] = useState(defaultTitle)
+   
 
     return (
         <Container>
@@ -144,12 +206,36 @@ export default function List() {
         { list && !showInsert &&
             <>
             <div className={styles.title}>
-                <h3>{list.name}</h3>
+                <div className={styles.name}>
+                    { !editTitle &&
+                        <h3>{list.name}</h3>
+                    }
+                    { editTitle &&
+                        <div className={loginstyles.login_form}>
+                            <input
+                                type="text"
+                                value={title}
+                                onChange={(e) => { setTitle(e.target.value) }} />
+                        </div>
+                    }
+                    { user && list && user.id === list.users && !showInsert &&
+                        <div className={styles.action}>
+                            { !editTitle && 
+                                <i class="fas fa-pencil-alt" onClick={() => setEditTitle(true)}/>
+                            }
+                            { editTitle && 
+                                <i class="fas fa-check" onClick={() => { handleSaveTitle(); setEditTitle(false)} }/>
+                            }
+                            <i class="fas fa-share-alt" onClick={() => handleShowInvitation()}/>
+                        </div>
+                    }
+                </div>
 
-                { user && list && user.id === list.users && !showInsert &&
-                    
-                    <i class="fas fa-share-alt" onClick={() => handleShowInvitation()}/>
-                    
+                { list && 
+                    <div className={styles.owner}>
+                        <i class="fas fa-user" />
+                        <p>{list.owner}</p>
+                    </div>
                 }
             </div>
 
@@ -285,7 +371,7 @@ export default function List() {
 
         {
             showSuccessAlert && 
-            <AlertSuccess message={'Your desiderio was registry succesfully.'} />
+            <AlertSuccess message={successMessage} />
         }
 
         {
@@ -295,7 +381,7 @@ export default function List() {
 
         {
             showInvitation && 
-            <Invitation id={list.id} handleClick={handleInvites} />
+            <Invitation id={list.id} handleClick={handleInvites} handleDelete={handleDeleteInvitation}/>
         }
         </Container>
     )

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styles from '../styles/Invitation.module.css'
 import loginstyles from '../styles/Login.module.css'
 
-export default function Invitation({id, handleClick}) {
+export default function Invitation({id, handleClick, handleDelete}) {
     const [username, setUsername] = useState('')
 
     return (
@@ -21,6 +21,9 @@ export default function Invitation({id, handleClick}) {
                 </div>
                 <button onClick={() => handleClick(username)}>
                     Invitation
+                </button>
+                <button className={styles.delete} onClick={() => handleDelete()}>
+                    Delete
                 </button>
                 </div>
             </div>

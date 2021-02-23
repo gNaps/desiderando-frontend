@@ -1,7 +1,27 @@
 .title {
     display: flex;
+    flex-direction: column;
+}
+
+.title .name{
+    display: flex;
     align-items: center;
     justify-content: space-between;
+    min-height: 77px;
+}
+
+.action i:first-child {
+    margin-right: 10px;
+}
+
+.title .owner {
+    display: flex;
+    align-items: center;
+}
+
+.title .owner p {
+    margin: 0;
+    margin-left: 10px;
 }
 
 .title button{

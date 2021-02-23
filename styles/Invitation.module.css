@@ -43,3 +43,8 @@
     cursor: pointer;
     margin-top: 20px;
 }
+
+button.delete {
+    background-color: #ED6767;;
+    box-shadow: 0 4px 14px 0 #ED6767;;
+}
