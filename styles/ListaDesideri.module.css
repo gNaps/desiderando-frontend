@@ -10,8 +10,12 @@
     min-height: 77px;
 }
 
-.action i:first-child {
+.action i {
     margin-right: 10px;
+}
+
+.action i:last-child {
+    margin-right: 0px;
 }
 
 .title .owner {
@@ -34,4 +38,8 @@
     color: #FFFFFF;
     padding: 10px;
     cursor: pointer;
+}
+
+.desideri_container {
+    min-height: calc(100vh - 250px);
 }

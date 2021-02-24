@@ -46,3 +46,21 @@
     align-items: center;
     margin-right: 40px;
 }
+
+.button_delete_insert {
+    background-color: #292939;
+    box-shadow: 0 4px 14px 0 #292939;
+    width: 90%;
+    border-radius: 25px;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 20px;;
+}
+
+.button_delete_insert p {
+    margin: 0;
+}

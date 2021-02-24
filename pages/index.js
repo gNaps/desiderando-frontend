@@ -2,7 +2,7 @@ import cookie from 'js-cookie';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 
 import Container from '../components/Container'
 import NavBar from '../components/NavBar'
@@ -46,38 +46,46 @@ export default function Home() {
   const handleSaveInsert = async () => {
     console.log('inserisco: ', newLista)
 
-    await fetch(`${API_URL}/desideriolists`, {
-        method: 'POST',
-        body: JSON.stringify(newLista),
-        headers: {
-            'Authorization': `Bearer ${cookie.get('jwt')}`, 
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.statusCode !== 400) {
-            setSuccessAlert(true)
-            setShowInsert(false)
+    const request = {
+      method: 'POST',
+      body: JSON.stringify(newLista),
+      headers: {
+          'Authorization': `Bearer ${cookie.get('jwt')}`, 
+          'Content-Type': 'application/json'
+      }
+    };
+    const response_res = await fetch(`${API_URL}/desideriolists`, request);
+    const response = await response_res.json()
+        
+    if(response.statusCode) {
+        setErrorAlert(true)
+        setMessage(response.message)
 
-            setTimeout(() => {
-                setSuccessAlert(false)
-            }, 1500)
-        } else {
-            console.log(data)
-            setErrorAlert(true)
-            setMessage(data.message)
+        setTimeout(() => {
+            setErrorAlert(false)
+            setMessage('')
+        }, 1500);
+    } else {
+        setSuccessAlert(true)
+        setShowInsert(false)
+        setNewLista({name: '', public: false, required_password: false, what_bought: false, who_bought: false});
+        setSuccessMessage("Your list was registry succesfully.")
 
-            setTimeout(() => {
-                setErrorAlert(false)
-                setMessage('')
-            }, 1500);
-        }
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-}
+        setTimeout(() => {
+            setSuccessAlert(false)
+            setSuccessMessage("");
+        }, 1500)
+        
+        const newListaDesideri = [ ...listadesideri ]
+        newListaDesideri.push(response)
+        mutate(`${API_URL}/desideriolists`, { ...newListaDesideri })
+    };
+  }
+
+  const deleteInsert = () => {
+    setShowInsert(false);
+    setNewLista({name: '', public: false, required_password: false, what_bought: false, who_bought: false});
+  }
 
   const fetcher = url => fetch(url, {
     method: 'GET',
@@ -106,6 +114,7 @@ export default function Home() {
   const [showSuccessAlert, setSuccessAlert] = useState(false)
   const [showErrorAlert, setErrorAlert] = useState(false)
   const [message, setMessage] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
 
   return (
     <Container>
@@ -114,6 +123,7 @@ export default function Home() {
       {
         !showInsert &&
         <>
+        <div style={{minHeight: 'calc(100vh - 250px)'}}>
         <h3>My lists</h3>
         { mylist &&
           mylist.map((lista) => (
@@ -136,6 +146,7 @@ export default function Home() {
           </Link> 
           ))
         }
+        </div>
 
         <div className='footer_action'>
           <ButtonAction label={'New list'} action={handleClick} />
@@ -212,6 +223,11 @@ export default function Home() {
 
             <div className='footer_action'>
                 <ButtonAction label={'Save'} action={handleSaveInsert} />
+                <button 
+                  className={loginstyles.button_delete_insert}
+                  onClick={() => deleteInsert()}>
+                  <p>Delete</p>
+                </button>
             </div>
         </>
       }

@@ -1,0 +1,31 @@
+.delete_button {
+    background: #ED6767;
+    box-shadow: 0 4px 14px 0 #ED6767;
+    width: 90%;
+    border-radius: 25px;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.back_button {
+    background-color: #292939;
+    box-shadow: 0 4px 14px 0 #292939;
+    width: 90%;
+    border-radius: 25px;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.delete_button p,
+.back_button p {
+    margin: 0;
+}

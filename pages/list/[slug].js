@@ -2,6 +2,7 @@ import Container from '../../components/Container'
 import NavBar from '../../components/NavBar'
 import ItemList from '../../components/ItemList'
 import ButtonAction from '../../components/ButtonAction'
+import ConfirmDelete from '../../components/ConfirmDelete'
 import AlertSuccess from '../../components/AlertSuccess'
 import AlertError from '../../components/AlertError'
 import Invitation from '../../components/Invitation'
@@ -17,6 +18,7 @@ import { API_URL } from '../../utils/url';
 
 import loginstyles from '../../styles/Login.module.css'
 import styles from '../../styles/ListaDesideri.module.css'
+import Router from 'next/router'
 
 export default function List() {
 
@@ -35,7 +37,6 @@ export default function List() {
     .then(res => res.json())
       
     const { data: list, error } = useSWR(`${API_URL}/desideriolists/?slug=${slug}`, fetcher)
-    
     
     const handleShowInsert = () => {
         setShowInsert(true)
@@ -174,8 +175,44 @@ export default function List() {
     }
 
     const handleDeleteInvitation = () => {
-        console.log("handledelete")
         setShowInvitation(false);
+    }
+
+    const handleDeleteList = async () => {
+        const request = {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${cookie.get('jwt')}`, 
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const response_res = await fetch(`${API_URL}/desideriolists/${list.id}`, request)
+        const response = await response_res.json()
+
+        setShowIDeleteAlert(false);
+        console.log(response)
+        
+        if(response.statusCode) {
+            setErrorAlert(true)
+            setMessage(response.message)
+
+            setTimeout(() => {
+                setErrorAlert(false)
+                setMessage('')
+            }, 1500);
+        } else {
+            setSuccessAlert(true)
+            setShowInsert(false)
+            setSuccessMessage("Your desiderio was registry succesfully.")
+
+            setTimeout(() => {
+                setSuccessAlert(false)
+                setSuccessMessage("");
+            }, 1500)
+            
+            Router.push('/');
+        }
     }
 
     const { user } = useContext(AuthContext)
@@ -189,7 +226,8 @@ export default function List() {
     const [successMessage, setSuccessMessage] = useState('')
 
     const [showInvitation, setShowInvitation] = useState(false)
-
+    const [showDeleteAlert, setShowIDeleteAlert] = useState(false)
+    
     const [editTitle, setEditTitle] = useState(false)
 
     let defaultTitle = "";
@@ -227,6 +265,7 @@ export default function List() {
                                 <i class="fas fa-check" onClick={() => { handleSaveTitle(); setEditTitle(false)} }/>
                             }
                             <i class="fas fa-share-alt" onClick={() => handleShowInvitation()}/>
+                            <i class="fas fa-trash" onClick={() => {setShowIDeleteAlert(true);}}/>
                         </div>
                     }
                 </div>
@@ -239,9 +278,11 @@ export default function List() {
                 }
             </div>
 
-             {list.desiderioitems.map((desiderio) => (
-                <ItemList desiderio={desiderio} category={desiderio.category} key={desiderio.id}/>
-            ))} 
+            <div className={styles.desideri_container}>
+                {list.desiderioitems.map((desiderio) => (
+                    <ItemList desiderio={desiderio} category={desiderio.category} key={desiderio.id}/>
+                ))} 
+            </div>
             </>
         }
         
@@ -382,6 +423,11 @@ export default function List() {
         {
             showInvitation && 
             <Invitation id={list.id} handleClick={handleInvites} handleDelete={handleDeleteInvitation}/>
+        }
+
+        {
+            showDeleteAlert && 
+            <ConfirmDelete id={list.id} message={"Confirm delete of this list?"} handleDelete={handleDeleteList} handleBack={() => {setShowIDeleteAlert(false)}} />
         }
         </Container>
     )
