@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import cookie from 'js-cookie';
 import React, { useEffect, useState } from 'react';
 
-import { SSO_GOOGLE_URL } from '../../utils/url';
+import { SSO_GOOGLE_URL } from '../../../utils/url';
 
 const GoogleAuth = () => {
     const r = useRouter();
