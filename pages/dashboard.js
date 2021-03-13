@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Container from '../components/Container'
 import styles from '../styles/Dashboard.module.css'
-import { SSO_GOOGLE_URL } from '../../../utils/url';
+import { SSO_GOOGLE_URL } from '../utils/url';
 
 export default function dashboard () {
 
