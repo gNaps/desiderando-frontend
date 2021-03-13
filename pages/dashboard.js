@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Container from '../components/Container'
 import styles from '../styles/Dashboard.module.css'
+import { SSO_GOOGLE_URL } from '../../../utils/url';
 
 export default function dashboard () {
 
@@ -30,7 +31,7 @@ export default function dashboard () {
                     </a>
                 </Link>
                 <p>or</p>
-                <Link href="https://8b14c8cb97f9.ngrok.io/connect/google">
+                <Link href={`${SSO_GOOGLE_URL}/connect/google`}>
                     <div className={styles.google_btn}>
                         <div className={styles.google_icon_wrapper}>
                             <img className={styles.google_icon} src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
