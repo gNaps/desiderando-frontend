@@ -2,6 +2,7 @@ import cookie from 'js-cookie';
 import { useContext, useState } from 'react'
 import { API_URL } from '../utils/url';
 import Router from 'next/router';
+import Link from 'next/link'
 
 import Container from '../components/Container'
 import styles from '../styles/Login.module.css'
@@ -57,7 +58,9 @@ export default function login () {
     return (
         <Container>
             <div className={dashstyles.logo}>
-                <img className={dashstyles.logo_img} src={'/logo-desiderando-black.png'} />
+                <Link href="/dashboard">
+                    <img className={dashstyles.logo_img} src={'/logo-desiderando-black.png'} />
+                </Link>
                 <p>No more unwanted gift.</p>
             </div>
 
@@ -76,6 +79,10 @@ export default function login () {
                         value={password}
                         onChange={(e) => { setPassword(e.target.value); setError(false) }} />
                 </div>
+
+                <Link href="auth/recovery">
+                    <p className={styles.recovery}>Forget password?</p>
+                </Link>
 
                 <div className={dashstyles.btn_container}>
                     <button type="submit" className={dashstyles.btn_login}>

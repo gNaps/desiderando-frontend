@@ -64,3 +64,10 @@
 .button_delete_insert p {
     margin: 0;
 }
+
+.recovery {
+    color: #79405c !important;
+    text-decoration: underline;
+    font-size: 12px !important;
+    cursor: pointer;
+}

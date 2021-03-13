@@ -29,6 +29,15 @@ export default function dashboard () {
                         </button>
                     </a>
                 </Link>
+                <p>or</p>
+                <Link href="https://8b14c8cb97f9.ngrok.io/connect/google">
+                    <div className={styles.google_btn}>
+                        <div className={styles.google_icon_wrapper}>
+                            <img className={styles.google_icon} src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
+                        </div>
+                        <p className={styles.btn_text}><b>Sign in with google</b></p>
+                    </div>
+                </Link>
             </div>
         </Container>
     )

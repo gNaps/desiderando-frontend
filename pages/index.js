@@ -1,5 +1,5 @@
 import cookie from 'js-cookie';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link'
 import useSWR, { mutate } from 'swr'
@@ -15,6 +15,8 @@ import AlertError from '../components/AlertError'
 import { API_URL } from '../utils/url';
 
 import loginstyles from '../styles/Login.module.css'
+
+import AuthContext from '../context/AuthContext'
 
 export default function Home() {
 
@@ -116,6 +118,8 @@ export default function Home() {
   const [message, setMessage] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
 
+  const { user } = useContext(AuthContext)
+
   return (
     <Container>
       <NavBar />
@@ -124,6 +128,7 @@ export default function Home() {
         !showInsert &&
         <>
         <div style={{minHeight: 'calc(100vh - 250px)'}}>
+        { user && <h5>Hi {user.username}!</h5>}
         <h3>My lists</h3>
         { mylist &&
           mylist.map((lista) => (
