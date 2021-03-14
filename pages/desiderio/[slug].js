@@ -34,6 +34,7 @@ export default function Desiderio() {
     const [showSuccessAlert, setSuccessAlert] = useState(false)
     const [showErrorAlert, setErrorAlert] = useState(false)
     const [message, setMessage] = useState('')
+    const [successMessage, setSuccessMessage] = useState('')
 
     const handleClick = async () => {
         console.log('you have booked desiderio')
@@ -68,6 +69,39 @@ export default function Desiderio() {
         .catch((error) => {
             console.error('Error:', error);
         });
+    }
+
+    const handleDeleteDesiderio = async () => {
+        const request = {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${cookie.get('jwt')}`, 
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const response_res = await fetch(`${API_URL}/desiderioitems/${desiderio.id}`, request)
+        const response = await response_res.json()
+        
+        if(response.statusCode) {
+            setErrorAlert(true)
+            setMessage(response.message)
+
+            setTimeout(() => {
+                setErrorAlert(false)
+                setMessage('')
+            }, 1500);
+        } else {
+            setSuccessAlert(true)
+            setSuccessMessage("Your desiderio was deleted succesfully.")
+
+            setTimeout(() => {
+                setSuccessAlert(false)
+                setSuccessMessage("");
+            }, 1500)
+            
+            r.back();
+        }
     }
 
     const { user } = useContext(AuthContext)
@@ -123,9 +157,15 @@ export default function Desiderio() {
             </>
         }
         
-        {user && desiderio && user.id !== desiderio.desideriolist.users && desiderio.bought_by === null &&
+        { user && desiderio && user.id !== desiderio.desideriolist.users && desiderio.bought_by === null &&
             <div className='footer_action'>
                 <ButtonAction label={'Book desiderio'} action={handleClick} />
+            </div>
+        }
+
+        { user && desiderio && user.id === desiderio.desideriolist.users &&
+            <div className='footer_action'>
+                <ButtonAction label={'Delete desiderio'} action={handleDeleteDesiderio} />
             </div>
         }
 

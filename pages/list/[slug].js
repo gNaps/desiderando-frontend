@@ -204,7 +204,7 @@ export default function List() {
         } else {
             setSuccessAlert(true)
             setShowInsert(false)
-            setSuccessMessage("Your desiderio was registry succesfully.")
+            setSuccessMessage("Your lista dei desideri was deleted succesfully.")
 
             setTimeout(() => {
                 setSuccessAlert(false)

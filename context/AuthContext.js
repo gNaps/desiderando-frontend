@@ -62,7 +62,9 @@ export const AuthProvider = (props) => {
 
     useEffect(() => {
         if(!jwt) {
-            r.push('/dashboard');
+            if(r.asPath.startsWith('/auth/changePassword') == false) {
+                r.push('/dashboard');
+            }
         } else {
             console.log('jwt esiste e user = ', user)
             if(user == null){

@@ -4,6 +4,7 @@ import dashstyles from '../../styles/Dashboard.module.css'
 import AlertSuccess from '../../components/AlertSuccess'
 
 import { API_URL } from '../../utils/url';
+import { detectBrowser, detectOS } from '../../utils/tools';
 
 import { useState } from 'react'
 import { useRouter } from 'next/router';
@@ -16,7 +17,10 @@ const Recovery = () => {
         e.preventDefault();
         console.log(email);
 
-        const bodyRequest = { email: email };
+        const browser = detectBrowser();
+        const os = detectOS();
+
+        const bodyRequest = { email: email, browser: browser, device: os };
         const request = {
             method: 'POST',
             body: JSON.stringify(bodyRequest),
